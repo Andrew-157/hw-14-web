@@ -19,14 +19,14 @@ def create_full_link(relative_link):
 
 
 def convert_date(text):
-    return datetime.strptime(text, '%B %d, %Y')
+    return datetime.strptime(text, '%B %d, %Y').date()
 
 
-def find_initials(text):
-    splitted = text.split(' ')
+def find_initials(text: str):
     initials = []
-    for i in range(len(splitted)):
-        initials.append(splitted[i][0])
+    for letter in text:
+        if letter == letter.upper() and letter.isalpha():
+            initials.append(letter)
 
     return '. '.join(initials)
 
@@ -44,14 +44,14 @@ class QuoteItem(Item):
 
 class AuthorItem(Item):
 
-    author = Field(
+    name = Field(
         output_processor=TakeFirst()
     )
     initials = Field(
         input_processor=MapCompose(find_initials),
         output_processor=TakeFirst()
     )
-    birth_date = Field(
+    birthday = Field(
         input_processor=MapCompose(convert_date),
         output_processor=TakeFirst()
     )

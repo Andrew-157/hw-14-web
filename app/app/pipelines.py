@@ -7,7 +7,7 @@
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 from scrapy.exceptions import DropItem
-from app.models import connect_db, create_table, Quote, Author, Tag
+from app.models import connect_db, create_table, Quote, Author, Tag, AuthorInfo
 from sqlalchemy.orm import sessionmaker
 
 
@@ -76,3 +76,37 @@ class DuplicateQuotePipeline:
 
         else:
             return item
+
+
+class SaveAuthorInfoPipeline:
+
+    def __init__(self):
+        engine = connect_db()
+        create_table(engine)
+        self.Session = sessionmaker(bind=engine)
+
+    def process_item(self, item, spider):
+        session = self.Session()
+        author = AuthorInfo()
+        author.name = item['name']
+        author.initials = item['initials']
+        author.birthday = item['birthday']
+        author.info = item['info']
+
+        author_in_db = session.query(AuthorInfo).filter_by(
+            name=item['name']).first()
+        if author_in_db:
+            return item
+
+        try:
+            session.add(author)
+            session.commit()
+
+        except:
+            session.rollback()
+            raise
+
+        finally:
+            session.close()
+
+        return item

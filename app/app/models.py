@@ -1,7 +1,7 @@
-from sqlalchemy import create_engine, Column, Table, ForeignKey, MetaData
+from sqlalchemy import create_engine, Column, Table, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Integer, String, Float, Boolean, Text
+from sqlalchemy import Integer, String, Text, Date
 from scrapy.utils.project import get_project_settings
 
 
@@ -52,3 +52,17 @@ class Tag(Base):
     name = Column(String(50), unique=True)
     quotes = relationship('Quote', secondary='quote_tag',
                           lazy='dynamic', backref='tag')
+
+
+class AuthorInfo(Base):
+
+    __tablename__ = 'author_info'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), unique=True)
+    initials = Column(String(10))
+    birthday = Column(Date)
+    info = Column('info', Text())
+
+
+

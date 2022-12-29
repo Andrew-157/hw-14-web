@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 scrapy = "*"
+sqlalchemy = "*"
 
 [dev-packages]
 autopep8 = "*"

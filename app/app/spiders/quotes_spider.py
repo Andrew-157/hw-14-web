@@ -15,6 +15,7 @@ class QuotesSpider(scrapy.Spider):
                 'author': quote.xpath("span/small/text()").get(),
                 'quote': quote.xpath("span[@class='text']/text()").get(),
                 'tags': quote.xpath("div[@class='tags']/a/text()").extract(),
+                'author_link': self.start_urls[0] + quote.xpath("span/a/@href").get()
             }
         next_link = response.xpath("//li[@class='next']/a/@href").get()
         if next_link:

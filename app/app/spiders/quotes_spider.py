@@ -7,6 +7,13 @@ class QuotesSpider(scrapy.Spider):
 
     name = 'quotes'
 
+    custom_settings = {
+        'ITEM_PIPELINES': {
+            'app.pipelines.DuplicateQuotePipeline': 100,
+            'app.pipelines.SaveQuotesPipeline': 200
+        }
+    }
+
     allowed_domains = ["quotes.toscrape.com"]
     start_urls = ['http://quotes.toscrape.com/']
 

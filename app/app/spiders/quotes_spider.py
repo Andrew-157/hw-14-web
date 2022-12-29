@@ -19,6 +19,7 @@ class QuotesSpider(scrapy.Spider):
             loader.add_xpath('tags', "div[@class='tags']/a/text()")
             loader.add_xpath(
                 'author_link', "span/a/@href")
+            yield loader.load_item()
 
         next_link = response.xpath("//li[@class='next']/a/@href").get()
         if next_link:

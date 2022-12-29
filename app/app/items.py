@@ -12,10 +12,17 @@ def remove_quotes(text):
     return text
 
 
+def create_full_link(relative_link):
+    full_link = 'http://quotes.toscrape.com/' + relative_link
+    return full_link
+
+
 class QuoteItem(Item):
-    author = Field()
-    quote = Field(
-        input_processor=MapCompose(remove_quotes)
+    author = Field(
+        output_processor=TakeFirst()
     )
+    quote = Field(input_processor=MapCompose(
+        remove_quotes), output_processor=TakeFirst())
     tags = Field()
-    author_link = Field()
+    author_link = Field(input_processor=MapCompose(
+        create_full_link), output_processor=TakeFirst())

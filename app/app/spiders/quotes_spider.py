@@ -7,7 +7,7 @@ class QuotesSpider(scrapy.Spider):
 
     name = 'quotes'
 
-    allowed_domains = ['quotes.toscrape.com/']
+    allowed_domains = ["quotes.toscrape.com"]
     start_urls = ['http://quotes.toscrape.com/']
 
     def parse(self, response):
@@ -23,4 +23,4 @@ class QuotesSpider(scrapy.Spider):
 
         next_link = response.xpath("//li[@class='next']/a/@href").get()
         if next_link:
-            yield scrapy.Request(url=self.start_urls[0] + next_link)
+            yield response.follow(url=response.urljoin(next_link), callback=self.parse)

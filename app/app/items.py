@@ -13,7 +13,7 @@ def remove_quotes(text):
 
 
 def create_full_link(relative_link):
-    full_link = 'http://quotes.toscrape.com/' + relative_link
+    full_link = 'http://quotes.toscrape.com' + relative_link
     return full_link
 
 

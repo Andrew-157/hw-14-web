@@ -1,4 +1,6 @@
 import scrapy
+from scrapy.loader import ItemLoader
+from app.items import QuoteItem
 
 
 class QuotesSpider(scrapy.Spider):
@@ -11,12 +13,13 @@ class QuotesSpider(scrapy.Spider):
     def parse(self, response):
 
         for quote in response.xpath("//div[@class='quote']"):
-            yield {
-                'author': quote.xpath("span/small/text()").get(),
-                'quote': quote.xpath("span[@class='text']/text()").get(),
-                'tags': quote.xpath("div[@class='tags']/a/text()").extract(),
-                'author_link': self.start_urls[0] + quote.xpath("span/a/@href").get()
-            }
+            loader = ItemLoader(item=QuoteItem(), selector=quote)
+            loader.add_xpath('author', "span/small/text()")
+            loader.add_xpath('quote', "span[@class='text']/text()")
+            loader.add_xpath('tags', "div[@class='tags']/a/text()")
+            loader.add_xpath(
+                'author_link', "span/a/@href")
+
         next_link = response.xpath("//li[@class='next']/a/@href").get()
         if next_link:
             yield scrapy.Request(url=self.start_urls[0] + next_link)

@@ -5,6 +5,7 @@
 
 from scrapy.item import Item, Field
 from scrapy.loader.processors import MapCompose, TakeFirst
+from datetime import datetime
 
 
 def remove_quotes(text):
@@ -18,11 +19,16 @@ def create_full_link(relative_link):
 
 
 def convert_date(text):
-    pass
+    return datetime.strptime(text, '%B %d, %Y')
 
 
 def find_initials(text):
-    pass
+    splitted = text.split(' ')
+    initials = []
+    for i in range(len(splitted)):
+        initials.append(splitted[i][0])
+
+    return '. '.join(initials)
 
 
 class QuoteItem(Item):

@@ -17,6 +17,14 @@ def create_full_link(relative_link):
     return full_link
 
 
+def convert_date(text):
+    pass
+
+
+def find_initials(text):
+    pass
+
+
 class QuoteItem(Item):
     author = Field(
         output_processor=TakeFirst()
@@ -26,3 +34,21 @@ class QuoteItem(Item):
     tags = Field()
     author_link = Field(input_processor=MapCompose(
         create_full_link), output_processor=TakeFirst())
+
+
+class AuthorItem(Item):
+
+    author = Field(
+        output_processor=TakeFirst()
+    )
+    initials = Field(
+        input_processor=MapCompose(find_initials),
+        output_processor=TakeFirst()
+    )
+    birth_date = Field(
+        input_processor=MapCompose(convert_date),
+        output_processor=TakeFirst()
+    )
+    info = Field(
+        output_processor=TakeFirst()
+    )

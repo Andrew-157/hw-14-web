@@ -18,7 +18,7 @@ class AuthorsSpider(scrapy.Spider):
             yield response.follow(url=response.urljoin(next_link), callback=self.parse)
 
     def parse_author(self, response):
-        for info in response.xpath("//div[@class='author-details']"):
-            yield {
-                'text': info.xpath("//div[@class='author-description']/text()").get()
-            }
+        author_page = response.xpath("//div[@class='author-details']")
+        yield {
+            'text': author_page.xpath("//div[@class='author-description']/text()").get()
+        }
